@@ -6,7 +6,7 @@ import { CriarRegistroComponent } from './criar-registro/criar-registro.componen
 import { ListReservationsComponent } from './list-reservations/list-reservations.component';
 
 export const routes: Routes = [
-  { path: '', component: AppComponent },
+  { path: '', component: LoginComponent, pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'criar-registro', component: CriarRegistroComponent },
   { path: 'list-reservations', component: ListReservationsComponent },
