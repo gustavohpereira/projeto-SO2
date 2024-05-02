@@ -1,0 +1,20 @@
+<div class="login_wrapper">
+  <div class="container">
+    <form (ngSubmit)="login($event)" action="#" method="POST" class="login-form">
+      <h2>Login</h2>
+      <div class="input-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" [(ngModel)]="username" required />
+      </div>
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" [(ngModel)]="password" required />
+      </div>
+      <button type="submit">Login</button>
+      <div class="form-footer">
+        <span>Don't have an account? <a href="#">Sign up</a></span>
+        <a href="#">Forgot password?</a>
+      </div>
+    </form>
+  </div>
+</div>
