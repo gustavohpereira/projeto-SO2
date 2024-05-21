@@ -20,7 +20,6 @@ export class LoginComponent {
 
   login(event: Event) {
     event.preventDefault();
-    this.http.get('http://127.0.0.1:3000/user/getAll').subscribe((data)=>{console.log(data)}) 
-    
+    this.http.get('http://18.215.169.99:3000/user/getAll').subscribe((data)=>{console.log(data)}) 
   }
 }
