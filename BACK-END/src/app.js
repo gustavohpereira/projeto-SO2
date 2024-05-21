@@ -13,10 +13,17 @@ app.use(Express.json());
 // Configure CORS
 app.use(cors({
     origin: 'http://localhost:4200',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], 
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true, 
-}));
+    credentials: true
+},
+    {
+        origin: 'http://18.215.169.99:4200',
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        allowedHeaders: ['Content-Type', 'Authorization'],
+        credentials: true
+    }
+));
 
 app.use('/user', UserRouter);
 app.use('/reservation', ReservationRouter);
