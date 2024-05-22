@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { FormsModule } from '@angular/forms'; 
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   standalone: true,
@@ -16,14 +17,20 @@ export class ListReservationsComponent implements OnInit {
   filteredReservations: any[] = [];
   searchQuery: string = '';
 
-  constructor(private http: HttpClient) {}
+  backendIp: string = '';
+
+  constructor(private http: HttpClient,private cookieService: CookieService) {
+   
+      this.backendIp = this.cookieService.get('backendIp') || '';
+    
+  }
 
   ngOnInit(): void {
     this.fetchReservations();
   }
 
   fetchReservations(): void {
-    this.http.get<any[]>(`${environment.apiUrl}reservation/getAll`).subscribe({
+    this.http.get<any[]>(`http://${this.backendIp}/reservation/getAll`).subscribe({
       next: (data: any[]) => {
         this.reservations = data;
         this.sortReservationsByDate(); // Ordenar as reservas por data
@@ -52,7 +59,7 @@ export class ListReservationsComponent implements OnInit {
       return;
     }
     this.http
-      .delete<any>(`${environment.apiUrl}reservation/delete/${id}`)
+      .delete<any>(`http://${this.backendIp}/reservation/delete/${id}`)
       .subscribe({
         next: (data) => {
           console.log('Reserva removida com sucesso:', data);

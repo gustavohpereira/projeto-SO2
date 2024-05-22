@@ -4,10 +4,13 @@ import { LoginComponent } from './login/login.component';
 import { AppComponent } from './app.component';
 import { ListReservationsComponent } from './list-reservations/list-reservations.component';
 import {AddReservationComponent} from './add-reservation/add-reservation.component';
+import { IpConfigComponent } from './ip-config/ip-config.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent, pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'create-reservation', component: AddReservationComponent },
   { path: 'list-reservations', component: ListReservationsComponent },
+  { path: 'ip-config', component: IpConfigComponent }
+  
 ];

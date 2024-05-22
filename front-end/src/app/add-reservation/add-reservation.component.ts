@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/htt
 import { Component } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { FormsModule } from '@angular/forms'; 
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-add-reservation',
@@ -12,14 +13,18 @@ import { FormsModule } from '@angular/forms';
 })
 export class AddReservationComponent {
   formData: any = {}; // Objeto para armazenar os dados do formulário
-
-  constructor(private http: HttpClient) {}
+  backendIp: string = '';
+  constructor(private http: HttpClient,private cookieService: CookieService) {
+   
+    this.backendIp = this.cookieService.get('backendIp') || '';
+  
+}
 
   submitForm(event: Event): void {
     console.log('Adicionando nova reserva...',this.formData);
     event.preventDefault();
     this.http.post<any>(
-      `${environment.apiUrl}reservation/create`, 
+      `http://${this.backendIp}/reservation/create`, 
       this.formData, 
       { observe: 'response' }
     ).subscribe({

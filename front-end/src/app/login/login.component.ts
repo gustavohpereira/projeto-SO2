@@ -2,6 +2,7 @@ import { Component, Input, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpErrorResponse, HttpHandler, HttpResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-login',
@@ -13,13 +14,19 @@ import { environment } from '../../environments/environment';
 export class LoginComponent {
   @Input() username: string = '';
   @Input() password: string = '';
-
+  backendIp: string = '';
   http = inject(HttpClient);
+
+  constructor( private cookieService: CookieService) {
+    this.backendIp = this.cookieService.get('backendIp') || '';
+  }
+
+
 
   login(event: Event) {
     event.preventDefault();
     this.http.post<any>(
-      `${environment.apiUrl}user/login`, 
+      `http://${this.backendIp}/user/login`, 
       { nome: this.username, senha: this.password }, 
       { observe: 'response' }
     ).subscribe({
