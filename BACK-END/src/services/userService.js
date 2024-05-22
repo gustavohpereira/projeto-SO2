@@ -85,19 +85,20 @@ export default class ReservationService {
   }
 
 
-  async login (req, res) {
+  async login(req, res) {
     const { nome, senha } = req.body;
     const query = "SELECT * FROM usuario WHERE nome = ? AND senha = ?";
+    
     this.db.query(query, [nome, senha], (err, result) => {
       if (err) {
-        console.error("Erro ao buscar usuario:", err);
-        res.status(500).send("Erro ao buscar usuario");
-        return;
+        console.error("Erro ao buscar usuário:", err);
+        return res.status(500).json({ message: "Erro ao buscar usuário" });
       }
-      if (result.length > 0) {
-        res.send("login efetuado com sucesso");
+      
+      if (result && result.length > 0) {
+        return res.status(200).json({ message: "Login efetuado com sucesso" });
       } else {
-        res.send("login falhou");
+        return res.status(401).json({ message: "Login falhou" });
       }
     });
   }

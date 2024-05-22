@@ -1,33 +1,33 @@
 <div id="app">
     <div class="container">
       <h2>Reservas Feitas</h2>
+      <div class="search-bar">
+        <input type="text" placeholder="Buscar por nome da sala" [(ngModel)]="searchQuery" (input)="searchReservations()">
+      </div>
+      <button (click)="addReservation()" type="button">Adicionar Nova Reserva</button>
       <div class="reservas-list">
-        <div class="reserva-item">
-          <div class="reserva-info">
-            <h3>Nome da Sala 1</h3>
-            <p>Local: Local da Sala 1</p>
-            <p>Data: 01/05/2024</p>
-            <p>Hora Início: 09:00</p>
-            <p>Hora Final: 12:00</p>
-            <p>Responsável: Fulano de Tal</p>
+
+        @for (re of filteredReservations; track re.id) {
+          <div class="reserva-item">
+            <button (click)="removeReservation(re.id)">Remover</button>
+            <div class="reserva-info">
+              <h3>{{re.roomName}}</h3>
+              <img src="{{re.roomPhoto}}" alt="Foto da Sala">
+              <p><strong>Sala:</strong> {{re.roomName}}</p>
+              <p><strong>Local:</strong> {{re.roomLocation}}</p>
+              <p><strong>Data:</strong>{{re.dateOfUse}}</p>
+              <p><strong>Hora Início:</strong> {{re.startTime}}</p>
+              <p><strong>Hora Final:</strong> {{re.endTime}}</p>
+              <p><strong>Responsável:</strong> {{re.responsible}}</p>
+              <p><strong>Motivo:</strong> {{re.reason}}</p>
+              <p><strong>Informações</strong> {{re.additionalInfo}}</p>
+              <p><strong>Convidados:</strong> {{re.guests}}</p>
+            </div>
+            <!-- <div class="reserva-image">
+              <img src="sala1.jpg" alt="Foto da Sala 1">
+            </div> -->
           </div>
-          <div class="reserva-image">
-            <img src="sala1.jpg" alt="Foto da Sala 1">
-          </div>
-        </div>
-        <div class="reserva-item">
-          <div class="reserva-info">
-            <h3>Nome da Sala 2</h3>
-            <p>Local: Local da Sala 2</p>
-            <p>Data: 02/05/2024</p>
-            <p>Hora Início: 14:00</p>
-            <p>Hora Final: 17:00</p>
-            <p>Responsável: Ciclano de Tal</p>
-          </div>
-          <div class="reserva-image">
-            <img src="sala2.jpg" alt="Foto da Sala 2">
-          </div>
-        </div>
+        }
       </div>
     </div>
   </div>

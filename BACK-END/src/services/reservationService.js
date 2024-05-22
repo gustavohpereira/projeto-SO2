@@ -1,5 +1,17 @@
 import mysql from "mysql2";
-import Reservation from "../models/reserv.model.js";
+import multer from "multer";
+import path from "path";
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); 
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); 
+  }
+});
+
+const upload = multer({ storage: storage });
 
 export default class ReservationService {
   constructor() {
@@ -10,70 +22,78 @@ export default class ReservationService {
       database: process.env.DB_DATABASE,
     });
     this.db.query(
-      `CREATE TABLE  IF NOT exists reservations (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            roomName VARCHAR(255) NOT NULL,
-            roomPhoto VARCHAR(255),
-            roomLocation VARCHAR(255) NOT NULL,
-            dateOfUse DATE NOT NULL,
-            startTime TIME NOT NULL,
-            endTime TIME NOT NULL,
-            responsible VARCHAR(255) NOT NULL,
-            reason TEXT,
-            additionalInfo TEXT,
-            guests TEXT
-        );`,
+      `CREATE TABLE IF NOT EXISTS reservations (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        roomName VARCHAR(255) NOT NULL,
+        roomPhoto VARCHAR(255),
+        roomLocation VARCHAR(255) NOT NULL,
+        dateOfUse DATE NOT NULL,
+        startTime TIME NOT NULL,
+        endTime TIME NOT NULL,
+        responsible VARCHAR(255) NOT NULL,
+        reason TEXT,
+        additionalInfo TEXT,
+        guests TEXT
+      );`,
       (err) => {
         if (err) {
           console.error("Erro ao criar tabela de reservas:", err);
           return;
         }
+        console.log("Tabela de reservas criada com sucesso.");
       }
     );
   }
 
   async create(req, res) {
     try {
-      const {
-        roomName,
-        roomPhoto,
-        roomLocation,
-        dateOfUse,
-        startTime,
-        endTime,
-        responsible,
-        reason,
-        additionalInfo,
-        guests,
-      } = req.body;
-      const reservation = {
-        roomName,
-        roomPhoto,
-        roomLocation,
-        dateOfUse,
-        startTime,
-        endTime,
-        responsible,
-        reason,
-        additionalInfo,
-        guests,
-      };
-
-      const query = "INSERT INTO reservations SET ?";
-      this.db.query(query, reservation, (err, result) => {
+      upload.single('roomPhoto')(req, res, (err) => {
         if (err) {
-          console.error("Erro ao criar reserva:", err);
-          res.status(500).send("Erro ao criar reserva");
-          return;
+          console.error("Erro ao fazer upload da imagem:", err);
+          return res.status(500).send({ message: "Erro ao fazer upload da imagem" });
         }
-        console.log("Reserva criada com sucesso");
-        res.send("Reserva criada com sucesso");
-      });
 
-      console.log("Requisição de reserva processada:", reservation);
+        const roomPhoto = req.file ? req.file.path : null;
+        console.log(roomPhoto)
+        const {
+          roomName,
+          roomLocation,
+          dateOfUse,
+          startTime,
+          endTime,
+          responsible,
+          reason,
+          additionalInfo,
+          guests,
+        } = req.body;
+        const reservation = {
+          roomName,
+          roomPhoto,
+          roomLocation,
+          dateOfUse,
+          startTime,
+          endTime,
+          responsible,
+          reason,
+          additionalInfo,
+          guests,
+        };
+
+        const query = "INSERT INTO reservations SET ?";
+        this.db.query(query, reservation, (err, result) => {
+          if (err) {
+            console.error("Erro ao criar reserva:", err);
+            return res.status(500).send({ message: "Erro ao criar reserva" });
+          }
+          console.log("Reserva criada com sucesso");
+          return res.status(200).send({ message: "Reserva criada com sucesso" });
+        });
+
+        console.log("Requisição de reserva processada:", reservation);
+      });
     } catch (error) {
       console.error("Erro ao processar a requisição:", error);
-      res.status(500).send("Erro interno");
+      return res.status(500).send({ message: "Erro interno" });
     }
   }
 
@@ -82,7 +102,7 @@ export default class ReservationService {
     this.db.query(query, (err, result) => {
       if (err) {
         console.error("Erro ao buscar reservas:", err);
-        res.status(500).send("Erro ao buscar reservas");
+        res.status(500).send({ message: "Erro ao buscar reservas" });
         return;
       }
       res.send(result);
@@ -95,10 +115,10 @@ export default class ReservationService {
     this.db.query(query, [id], (err, result) => {
       if (err) {
         console.error("Erro ao deletar reserva:", err);
-        res.status(500).send("Erro ao deletar reserva");
+        res.status(500).send({ message: "Erro ao deletar reserva" });
         return;
       }
-      res.send("Reserva deletada com sucesso");
+      res.send({ message: "Reserva deletada com sucesso" });
     });
   }
 }
