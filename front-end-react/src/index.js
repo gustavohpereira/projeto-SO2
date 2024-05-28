@@ -9,7 +9,7 @@ import store from './store/index';
 import IpConfig from './components/ip-config/IpConfig';
 import Login from './components/login/login';
 import ListReservations from './components/list-reservation/list-reservation';
-import AddReservation from './components/add-reservation/add-reservation';
+import { AddReservationComponent } from './components/add-reservation/add-reservation';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -20,7 +20,7 @@ root.render(
           <Route exact path="/" element={<Login />} />
           <Route path="/ip-config" element={<IpConfig />} />
           <Route path="/list-reservations" element={<ListReservations />} />
-          <Route path='/add-reservation' element={<AddReservation></AddReservation>}/>
+          <Route path='/create-reservation' element={<AddReservationComponent></AddReservationComponent>}/>
         </Routes>
       </Router>
     </Provider>
