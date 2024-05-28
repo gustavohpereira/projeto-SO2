@@ -61,7 +61,7 @@ export const ListReservations = () => {
 
     return (
         <div id="app">
-            <div className="container">
+            <div className="container_list">
                 <h2>Reservas Feitas</h2>
                 <div className="search-bar">
                     <input
@@ -71,16 +71,15 @@ export const ListReservations = () => {
                         onChange={(e) => searchReservations(e.target.value)}
                     />
                 </div>
-                <button onClick={addReservation} type="button">
+                <button onClick={addReservation} type="button" className='add-reservation'>
                     Adicionar Nova Reserva
                 </button>
                 <div className="reservas-list">
                     {filteredReservations.map((re) => (
                         <div key={re.id} className="reserva-item">
-                            <button onClick={() => removeReservation(re.id)}>Remover</button>
                             <div className="reserva-info">
-                                <h3>{re.roomName}</h3>
-                                <img src={re.roomPhoto} alt="Foto da Sala" />
+                                <h3 className='room-name'>{re.roomName}</h3> 
+                                <img src={re.roomPhoto !== null ? re.roomPhoto:null } alt="Foto da Sala" className='room-image'/>
                                 <p><strong>Sala:</strong> {re.roomName}</p>
                                 <p><strong>Local:</strong> {re.roomLocation}</p>
                                 <p><strong>Data:</strong> {re.dateOfUse}</p>
@@ -91,6 +90,7 @@ export const ListReservations = () => {
                                 <p><strong>Informações:</strong> {re.additionalInfo}</p>
                                 <p><strong>Convidados:</strong> {re.guests}</p>
                             </div>
+                            <button onClick={() => removeReservation(re.id)}>Remover</button>
                         </div>
                     ))}
                 </div>
